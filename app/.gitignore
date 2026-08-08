@@ -43,4 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-zz
+
+/files
+Flutter E-Commerce Challenge — Design & Software Architecture Specification.md
