@@ -136,10 +136,9 @@ class _AddButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // We will hook this up to the real cart in Phase 9.
-    // For now it acts as a visual mockup.
     return InkWell(
       onTap: () {
+        ref.read(cartProvider.notifier).addToCart(product, 1);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Added ${product.title} to cart'),

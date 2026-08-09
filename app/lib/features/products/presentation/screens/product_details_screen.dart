@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/products_provider.dart';
+import '../../../../features/cart/presentation/providers/cart_provider.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -187,9 +188,12 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: Hook up to CartProvider in Phase 9
+                          ref.read(cartProvider.notifier).addToCart(product, _quantity);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Added $_quantity of ${product.title} to cart')),
+                            SnackBar(
+                              content: Text('Added $_quantity of ${product.title} to cart'),
+                              behavior: SnackBarBehavior.floating,
+                            ),
                           );
                         },
                         child: Text('Add to Cart - \$${(product.price * _quantity).toStringAsFixed(2)}'),
