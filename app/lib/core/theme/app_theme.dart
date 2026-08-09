@@ -20,47 +20,50 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.background,
       
-      // Typography
+      // Typography tailored exactly to Shewit Design Spec
       textTheme: GoogleFonts.interTextTheme().copyWith(
-        displayLarge: GoogleFonts.inter(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimary,
-        ),
-        headlineLarge: GoogleFonts.inter(
+        headlineLarge: GoogleFonts.inter( // headline-lg
           fontSize: 28,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
           letterSpacing: -0.02,
           color: AppColors.textPrimary,
+          height: 34 / 28,
         ),
-        titleLarge: GoogleFonts.inter(
+        titleLarge: GoogleFonts.inter( // price-display
           fontSize: 20,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.01,
           color: AppColors.textPrimary,
+          height: 24 / 20,
         ),
-        titleMedium: GoogleFonts.inter(
+        titleMedium: GoogleFonts.inter( // title-md
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimary,
+          height: 24 / 18,
         ),
-        bodyLarge: GoogleFonts.inter(
+        bodyLarge: GoogleFonts.inter( // body-lg
           fontSize: 16,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w400,
           color: AppColors.textPrimary,
+          height: 24 / 16,
         ),
-        bodyMedium: GoogleFonts.inter(
+        bodyMedium: GoogleFonts.inter( // body-sm
           fontSize: 14,
-          fontWeight: FontWeight.normal,
+          fontWeight: FontWeight.w400,
           color: AppColors.textSecondary,
+          height: 20 / 14,
         ),
-        labelLarge: GoogleFonts.inter( // Button text
-          fontSize: 14,
+        labelSmall: GoogleFonts.inter( // label-caps
+          fontSize: 12,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.05,
+          color: AppColors.textSecondary,
+          height: 16 / 12,
         ),
       ),
 
-      // Buttons
+      // Buttons (4px radius per spec)
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -91,7 +94,7 @@ class AppTheme {
         ),
       ),
 
-      // Input Fields
+      // Input Fields (Bottom border transitioning to primary_color_hex)
       inputDecorationTheme: const InputDecorationTheme(
         filled: true,
         fillColor: Colors.transparent,
@@ -102,7 +105,7 @@ class AppTheme {
           borderSide: BorderSide(color: AppColors.borderSubtle),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primary, width: 1),
         ),
         errorBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: AppColors.error),
@@ -110,7 +113,7 @@ class AppTheme {
         contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
       ),
 
-      // Cards
+      // Cards (8px radius, subtle border, no shadow per spec)
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 0,
@@ -129,7 +132,7 @@ class AppTheme {
         centerTitle: true,
       ),
 
-      // Bottom Navigation
+      // Bottom Navigation (Pure background, no top shadow)
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.background,
         selectedItemColor: AppColors.primary,
