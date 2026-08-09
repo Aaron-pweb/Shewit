@@ -13,7 +13,9 @@ class CartScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cartState = ref.watch(cartProvider);
     final subtotal = ref.watch(cartSubtotalProvider);
-    const shipping = 10.0;
+    
+    // Dynamic Shipping Logic
+    final shipping = subtotal > 100.0 ? 0.0 : 10.0;
     final total = subtotal + shipping;
 
     return Scaffold(
@@ -66,7 +68,24 @@ class CartScreen extends ConsumerWidget {
                         ref.read(cartProvider.notifier).updateQuantity(item.product.id, item.quantity - 1);
                       },
                       onRemove: () {
+                        // Optimistically remove from cart
                         ref.read(cartProvider.notifier).removeFromCart(item.product.id);
+                        
+                        // Show Undo Snackbar
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Item removed from cart'),
+                            behavior: SnackBarBehavior.floating,
+                            action: SnackBarAction(
+                              label: 'UNDO',
+                              onPressed: () {
+                                // Put it back with the original quantity
+                                ref.read(cartProvider.notifier).updateQuantity(item.product.id, item.quantity);
+                              },
+                            ),
+                          ),
+                        );
                       },
                     );
                   },
@@ -108,7 +127,12 @@ class CartScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Shipping', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
-                        Text('\$${shipping.toStringAsFixed(2)}', style: Theme.of(context).textTheme.titleMedium),
+                        Text(
+                          shipping == 0 ? 'Free' : '\$${shipping.toStringAsFixed(2)}', 
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: shipping == 0 ? Colors.green : null,
+                          )
+                        ),
                       ],
                     ),
                     const Padding(
@@ -196,11 +220,12 @@ class _CartItemCard extends StatelessWidget {
           border: Border.all(color: AppColors.borderSubtle),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Thumbnail
             Container(
               width: 80,
-              height: 80,
+              height: 100, // Adjusted to match taller content
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: AppColors.background,
@@ -213,52 +238,78 @@ class _CartItemCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-            // Details
+            // Details & Horizontal Modifiers
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    item.product.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.product.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '\$${item.product.price.toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '\$${item.product.price.toStringAsFixed(2)}',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary),
+                  const SizedBox(height: 12),
+                  // Horizontal Quantity Modifier
+                  Row(
+                    children: [
+                      _ModifierButton(
+                        icon: Icons.remove,
+                        onTap: onDecrement,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          '${item.quantity}',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      _ModifierButton(
+                        icon: Icons.add,
+                        onTap: onIncrement,
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            // Quantity Modifier
-            Column(
-              children: [
-                IconButton(
-                  onPressed: onIncrement,
-                  icon: const Icon(Icons.add_circle_outline, size: 20),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 16,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${item.quantity}',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 8),
-                IconButton(
-                  onPressed: onDecrement,
-                  icon: const Icon(Icons.remove_circle_outline, size: 20),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  splashRadius: 16,
-                ),
-              ],
-            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ModifierButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _ModifierButton({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          border: Border.all(color: AppColors.borderSubtle),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Icon(icon, size: 16, color: AppColors.textPrimary),
       ),
     );
   }

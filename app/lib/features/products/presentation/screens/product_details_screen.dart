@@ -162,23 +162,38 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          onPressed: _decrement,
-                          icon: const Icon(Icons.remove_circle_outline),
-                          color: AppColors.textSecondary,
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          '$_quantity',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
+                        InkWell(
+                          onTap: _decrement,
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.borderSubtle),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Icon(Icons.remove, size: 20),
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        IconButton(
-                          onPressed: _increment,
-                          icon: const Icon(Icons.add_circle_outline),
-                          color: AppColors.textSecondary,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            '$_quantity',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: _increment,
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.borderSubtle),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Icon(Icons.add, size: 20),
+                          ),
                         ),
                       ],
                     ),
