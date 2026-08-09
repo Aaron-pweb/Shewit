@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../domain/cart_item.dart';
@@ -22,6 +23,7 @@ final cartProvider = StateNotifierProvider<CartNotifier, AsyncValue<List<CartIte
 
 class CartNotifier extends StateNotifier<AsyncValue<List<CartItem>>> {
   final CartRepository _repo;
+  Timer? _saveTimer;
 
   CartNotifier(this._repo) : super(const AsyncValue.loading()) {
     _loadCart();
@@ -36,6 +38,14 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItem>>> {
     }
   }
 
+  // Debounces disk writes to save battery and I/O when spamming quantity buttons
+  void _debouncedSave(List<CartItem> items) {
+    _saveTimer?.cancel();
+    _saveTimer = Timer(const Duration(milliseconds: 500), () async {
+      await _repo.saveCart(items);
+    });
+  }
+
   Future<void> addToCart(Product product, int quantity) async {
     if (state is! AsyncData) return;
     
@@ -44,17 +54,18 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItem>>> {
     
     List<CartItem> newList;
     if (index >= 0) {
-      // Product exists, update quantity
       newList = List.from(currentList);
       final existingItem = newList[index];
-      newList[index] = existingItem.copyWith(quantity: existingItem.quantity + quantity);
+      int newQuantity = existingItem.quantity + quantity;
+      if (newQuantity > 99) newQuantity = 99; // Soft Limit
+      newList[index] = existingItem.copyWith(quantity: newQuantity);
     } else {
-      // New product
-      newList = [...currentList, CartItem(product: product, quantity: quantity)];
+      int newQuantity = quantity > 99 ? 99 : quantity; // Soft Limit
+      newList = [...currentList, CartItem(product: product, quantity: newQuantity)];
     }
     
     state = AsyncValue.data(newList);
-    await _repo.saveCart(newList);
+    _debouncedSave(newList); // Optimistic UI, debounced disk write
   }
 
   Future<void> updateQuantity(int productId, int quantity) async {
@@ -66,13 +77,13 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItem>>> {
     if (index >= 0) {
       final newList = List<CartItem>.from(currentList);
       if (quantity > 0) {
-        newList[index] = newList[index].copyWith(quantity: quantity);
+        int safeQuantity = quantity > 99 ? 99 : quantity; // Soft Limit
+        newList[index] = newList[index].copyWith(quantity: safeQuantity);
       } else {
-        // If quantity is 0, remove the item
         newList.removeAt(index);
       }
       state = AsyncValue.data(newList);
-      await _repo.saveCart(newList);
+      _debouncedSave(newList); // Optimistic UI, debounced disk write
     }
   }
 
@@ -82,7 +93,14 @@ class CartNotifier extends StateNotifier<AsyncValue<List<CartItem>>> {
 
   Future<void> clearCart() async {
     state = const AsyncValue.data([]);
-    await _repo.clearCart();
+    _saveTimer?.cancel(); 
+    await _repo.clearCart(); // Empty cart saves immediately
+  }
+
+  @override
+  void dispose() {
+    _saveTimer?.cancel();
+    super.dispose();
   }
 }
 

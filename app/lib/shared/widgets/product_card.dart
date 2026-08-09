@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/products/data/models/product_model.dart';
@@ -138,6 +139,7 @@ class _AddButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () {
+        HapticFeedback.lightImpact();
         ref.read(cartProvider.notifier).addToCart(product, 1);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
