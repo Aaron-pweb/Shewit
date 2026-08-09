@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/products_provider.dart';
 import '../../../../shared/widgets/product_card.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
@@ -65,7 +66,7 @@ class HomeScreen extends ConsumerWidget {
                       return ShewitProductCard(
                         product: product,
                         onTap: () {
-                          // TODO: Phase 7 Product Details
+                          context.push('/product/${product.id}');
                         },
                       );
                     },

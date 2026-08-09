@@ -8,6 +8,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/main/presentation/screens/main_screen.dart';
 import '../../features/products/presentation/screens/home_screen.dart';
 import '../../features/products/presentation/screens/categories_screen.dart';
+import '../../features/products/presentation/screens/product_details_screen.dart';
 import '../../features/cart/presentation/screens/cart_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 
@@ -65,6 +66,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const ProfileScreen(),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/product/:id',
+        builder: (context, state) {
+          final idString = state.pathParameters['id'];
+          final id = int.tryParse(idString ?? '0') ?? 0;
+          return ProductDetailsScreen(productId: id);
+        },
       ),
     ],
   );

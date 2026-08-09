@@ -17,6 +17,12 @@ final productsProvider = FutureProvider<List<Product>>((ref) async {
   return repository.getProducts();
 });
 
+// Fetches a single product by ID for the details screen
+final productDetailsProvider = FutureProvider.family<Product, int>((ref, id) async {
+  final repository = ref.watch(productRepositoryProvider);
+  return repository.getProductById(id);
+});
+
 // Fetches all categories
 final categoriesProvider = FutureProvider<List<String>>((ref) async {
   final repository = ref.watch(productRepositoryProvider);
