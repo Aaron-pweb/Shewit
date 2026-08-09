@@ -18,10 +18,10 @@ class MainScreen extends ConsumerWidget {
       body: child,
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-        decoration: const BoxDecoration(
-          color: AppColors.background,
+        decoration: BoxDecoration(
+          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           border: Border(
-            top: BorderSide(color: AppColors.borderSubtle, width: 1),
+            top: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 1),
           ),
         ),
         child: SizedBox(
@@ -94,7 +94,9 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? AppColors.primary : AppColors.textSecondary;
+    final color = isActive 
+        ? (Theme.of(context).bottomNavigationBarTheme.selectedItemColor ?? AppColors.primary) 
+        : (Theme.of(context).bottomNavigationBarTheme.unselectedItemColor ?? AppColors.textSecondary);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -155,7 +157,7 @@ class _NavItem extends StatelessWidget {
               width: 4,
               height: 4,
               decoration: BoxDecoration(
-                color: isActive ? AppColors.primary : Colors.transparent,
+                color: isActive ? color : Colors.transparent,
                 shape: BoxShape.circle,
               ),
             ),

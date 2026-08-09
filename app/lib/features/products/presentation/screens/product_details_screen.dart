@@ -30,7 +30,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
     final productAsync = ref.watch(productDetailsProvider(widget.productId));
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: productAsync.when(
         data: (product) => Stack(
           children: [
@@ -39,15 +39,15 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 SliverAppBar(
                   expandedHeight: 400.0,
                   pinned: true,
-                  backgroundColor: AppColors.background,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   elevation: 0,
                   leading: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: AppColors.primary),
+                    icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.primary),
                     onPressed: () => context.pop(),
                   ),
                   actions: [
                     IconButton(
-                      icon: const Icon(Icons.favorite_border, color: AppColors.primary),
+                      icon: Icon(Icons.favorite_border, color: Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Added to Wishlist')),
@@ -57,16 +57,31 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   ],
                   flexibleSpace: FlexibleSpaceBar(
                     background: Container(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       padding: const EdgeInsets.only(top: 80, bottom: 24, left: 24, right: 24),
-                      child: CachedNetworkImage(
-                        imageUrl: product.image,
-                        fit: BoxFit.contain,
-                        placeholder: (context, url) => const AppShimmer(
-                          width: double.infinity,
-                          height: double.infinity,
-                        ),
-                      ),
+                      child: Theme.of(context).brightness == Brightness.dark
+                        ? ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFFB0B0B0),
+                              BlendMode.multiply,
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: product.image,
+                              fit: BoxFit.contain,
+                              placeholder: (context, url) => const AppShimmer(
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                            ),
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: product.image,
+                            fit: BoxFit.contain,
+                            placeholder: (context, url) => const AppShimmer(
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          ),
                     ),
                   ),
                 ),
@@ -143,9 +158,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   bottom: MediaQuery.of(context).padding.bottom + 16,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.background,
-                  border: const Border(
-                    top: BorderSide(color: AppColors.borderSubtle, width: 1),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border(
+                    top: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 1),
                   ),
                   boxShadow: [
                     BoxShadow(

@@ -6,6 +6,7 @@ import '../../features/products/data/models/product_model.dart';
 import '../../core/theme/app_colors.dart';
 import 'app_shimmer.dart';
 import '../../features/cart/presentation/providers/cart_provider.dart';
+import '../../features/products/presentation/providers/favorites_provider.dart';
 
 class ShewitProductCard extends ConsumerWidget {
   final Product product;
@@ -33,22 +34,42 @@ class ShewitProductCard extends ConsumerWidget {
                 fit: StackFit.expand,
                 children: [
                   Container(
-                    color: Colors.white, // Pure white background for product photos
+                    color: Theme.of(context).cardColor, // Adapts to light/dark
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: CachedNetworkImage(
-                        imageUrl: product.image,
-                        fit: BoxFit.contain,
-                        memCacheWidth: 400, // Optimize memory for lists
-                        placeholder: (context, url) => const AppShimmer(
-                          width: double.infinity,
-                          height: double.infinity,
-                          borderRadius: 0,
-                        ),
-                        errorWidget: (context, url, error) => const Center(
-                          child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
-                        ),
-                      ),
+                      child: Theme.of(context).brightness == Brightness.dark
+                        ? ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFFB0B0B0), // Dims the harsh white JPEG backgrounds
+                              BlendMode.multiply,
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: product.image,
+                              fit: BoxFit.contain,
+                              memCacheWidth: 400,
+                              placeholder: (context, url) => const AppShimmer(
+                                width: double.infinity,
+                                height: double.infinity,
+                                borderRadius: 0,
+                              ),
+                              errorWidget: (context, url, error) => const Center(
+                                child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
+                              ),
+                            ),
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: product.image,
+                            fit: BoxFit.contain,
+                            memCacheWidth: 400,
+                            placeholder: (context, url) => const AppShimmer(
+                              width: double.infinity,
+                              height: double.infinity,
+                              borderRadius: 0,
+                            ),
+                            errorWidget: (context, url, error) => const Center(
+                              child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
+                            ),
+                          ),
                     ),
                   ),
                   // Rating Badge
@@ -78,6 +99,12 @@ class ShewitProductCard extends ConsumerWidget {
                         ],
                       ),
                     ),
+                  ),
+                  // Favorite Button
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: _FavoriteButton(productId: product.id),
                   ),
                 ],
               ),
@@ -162,6 +189,32 @@ class _AddButton extends ConsumerWidget {
           size: 20,
         ),
       ),
+    );
+  }
+}
+
+class _FavoriteButton extends ConsumerWidget {
+  final int productId;
+  const _FavoriteButton({required this.productId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favorites = ref.watch(favoritesProvider);
+    final isFavorite = favorites.contains(productId);
+
+    return IconButton(
+      onPressed: () {
+        HapticFeedback.selectionClick();
+        ref.read(favoritesProvider.notifier).toggle(productId);
+      },
+      icon: Icon(
+        isFavorite ? Icons.favorite : Icons.favorite_border,
+        color: isFavorite ? AppColors.error : AppColors.textSecondary.withOpacity(0.5),
+        size: 20,
+      ),
+      splashRadius: 20,
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
     );
   }
 }

@@ -16,14 +16,15 @@ class AppShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Shimmer.fromColors(
-      baseColor: AppColors.surfaceVariant,
-      highlightColor: AppColors.background,
+      baseColor: isDark ? Colors.grey[800]! : AppColors.surfaceVariant,
+      highlightColor: isDark ? Colors.grey[700]! : AppColors.background,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: AppColors.surface, // required for shimmer to work
+          color: isDark ? Colors.grey[800]! : AppColors.surface, // required for shimmer to work
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),

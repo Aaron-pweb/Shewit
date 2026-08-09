@@ -142,4 +142,139 @@ class AppTheme {
       ),
     );
   }
+
+  static ThemeData get darkTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.primaryContainer, // Use lighter primary for dark mode
+        primaryContainer: AppColors.primary,
+        secondary: AppColors.secondaryContainer,
+        secondaryContainer: AppColors.secondary,
+        surface: AppColors.surfaceDark,
+        error: AppColors.error,
+        onPrimary: AppColors.textInverse,
+        onSecondary: AppColors.textPrimary,
+        onSurface: AppColors.textInverse,
+        onError: AppColors.textInverse,
+      ),
+      scaffoldBackgroundColor: AppColors.surfaceDark,
+      
+      textTheme: GoogleFonts.interTextTheme().copyWith(
+        headlineLarge: GoogleFonts.inter(
+          fontSize: 28,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.02,
+          color: AppColors.textInverse,
+          height: 34 / 28,
+        ),
+        titleLarge: GoogleFonts.inter(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.01,
+          color: AppColors.textInverse,
+          height: 24 / 20,
+        ),
+        titleMedium: GoogleFonts.inter(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textInverse,
+          height: 24 / 18,
+        ),
+        bodyLarge: GoogleFonts.inter(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: AppColors.textInverse,
+          height: 24 / 16,
+        ),
+        bodyMedium: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.white70,
+          height: 20 / 14,
+        ),
+        labelSmall: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.05,
+          color: Colors.white70,
+          height: 16 / 12,
+        ),
+      ),
+
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryContainer,
+          foregroundColor: AppColors.textInverse,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          elevation: 0,
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.textInverse,
+          side: const BorderSide(color: Color(0xFF333333)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: AppColors.primaryContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+
+      inputDecorationTheme: const InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.transparent,
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF333333)),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF333333)),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.primaryContainer, width: 1),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.error),
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+      ),
+
+      cardTheme: CardThemeData(
+        color: const Color(0xFF1E1E1E),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(color: Color(0xFF333333), width: 1),
+        ),
+        margin: EdgeInsets.zero,
+      ),
+
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.surfaceDark,
+        foregroundColor: AppColors.textInverse,
+        elevation: 0,
+        centerTitle: true,
+      ),
+
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: AppColors.surfaceDark,
+        selectedItemColor: AppColors.primaryContainer,
+        unselectedItemColor: Colors.white54,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+      ),
+    );
+  }
 }

@@ -19,7 +19,7 @@ class CartScreen extends ConsumerWidget {
     final total = subtotal + shipping;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           'Your Cart',
@@ -100,9 +100,9 @@ class CartScreen extends ConsumerWidget {
                   bottom: MediaQuery.of(context).padding.bottom + 24,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: const Border(
-                    top: BorderSide(color: AppColors.borderSubtle, width: 1),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border(
+                    top: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 1),
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -135,15 +135,15 @@ class CartScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(height: 1, color: AppColors.borderSubtle),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: Divider(height: 1, color: Theme.of(context).dividerColor.withOpacity(0.1)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Total', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-                        Text('\$${total.toStringAsFixed(2)}', style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.primary)),
+                        Text('\$${total.toStringAsFixed(2)}', style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.primary)),
                       ],
                     ),
                     const SizedBox(height: 24),
@@ -215,9 +215,9 @@ class _CartItemCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.borderSubtle),
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,14 +228,26 @@ class _CartItemCard extends StatelessWidget {
               height: 100, // Adjusted to match taller content
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: CachedNetworkImage(
-                imageUrl: item.product.image,
-                fit: BoxFit.contain,
-                placeholder: (context, url) => const AppShimmer(width: 80, height: 80),
-              ),
+              child: Theme.of(context).brightness == Brightness.dark
+                ? ColorFiltered(
+                    colorFilter: const ColorFilter.mode(
+                      Color(0xFFB0B0B0),
+                      BlendMode.multiply,
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: item.product.image,
+                      fit: BoxFit.contain,
+                      placeholder: (context, url) => const AppShimmer(width: 80, height: 80),
+                    ),
+                  )
+                : CachedNetworkImage(
+                    imageUrl: item.product.image,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => const AppShimmer(width: 80, height: 80),
+                  ),
             ),
             const SizedBox(width: 16),
             // Details & Horizontal Modifiers
@@ -256,7 +268,7 @@ class _CartItemCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         '\$${item.product.price.toStringAsFixed(2)}',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.primary),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                       ),
                     ],
                   ),
@@ -305,11 +317,11 @@ class _ModifierButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: AppColors.background,
-          border: Border.all(color: AppColors.borderSubtle),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1)),
           borderRadius: BorderRadius.circular(4),
         ),
-        child: Icon(icon, size: 16, color: AppColors.textPrimary),
+        child: Icon(icon, size: 16, color: Theme.of(context).colorScheme.onSurface),
       ),
     );
   }
