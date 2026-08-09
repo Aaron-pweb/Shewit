@@ -23,7 +23,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (authState.isLoading) return null;
 
-      if (!isAuth && !isLoggingIn && !isSplash) {
+      if (!isAuth) {
+        if (isLoggingIn) return null;
         return '/login';
       }
 
