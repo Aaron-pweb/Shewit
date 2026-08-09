@@ -3,13 +3,12 @@ import '../../data/models/product_model.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../../data/repositories/product_repository_impl.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 // Provides the repository
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
-  final dio = ref.watch(dioClientProvider); // We need to expose this globally or redefine.
-  // Wait, dioClientProvider is currently in auth_provider.dart. 
-  // It's better to move it to a shared location, but for now we can redefine it here or move it.
-  return ProductRepositoryImpl(DioClient());
+  final dio = ref.watch(dioClientProvider); 
+  return ProductRepositoryImpl(dio);
 });
 
 // Fetches all products
