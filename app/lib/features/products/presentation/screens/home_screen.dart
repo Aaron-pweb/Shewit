@@ -22,9 +22,17 @@ class HomeScreen extends ConsumerWidget {
         title: isSearchActive
             ? TextField(
                 autofocus: true,
+                style: const TextStyle(color: AppColors.textPrimary),
+                cursorColor: AppColors.primary,
                 decoration: const InputDecoration(
                   hintText: 'Search products...',
-                  border: InputBorder.none,
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.borderSubtle),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+                  ),
+                  contentPadding: EdgeInsets.only(bottom: 8),
                 ),
                 onChanged: (value) {
                   ref.read(searchQueryProvider.notifier).state = value;
@@ -68,8 +76,25 @@ class HomeScreen extends ConsumerWidget {
             sliver: filteredProductsAsync.when(
               data: (products) {
                 if (products.isEmpty) {
-                  return const SliverFillRemaining(
-                    child: Center(child: Text('No products found.')),
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.search_off_outlined, size: 64, color: AppColors.borderSubtle),
+                          const SizedBox(height: 16),
+                          Text(
+                            searchQuery.isNotEmpty 
+                                ? "We couldn't find anything for '$searchQuery'"
+                                : "No products found.",
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 }
                 return SliverGrid(
