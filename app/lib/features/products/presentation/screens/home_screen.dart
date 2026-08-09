@@ -14,17 +14,36 @@ class HomeScreen extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider);
     final filteredProductsAsync = ref.watch(filteredProductsProvider);
 
+    final isSearchActive = ref.watch(isSearchActiveProvider);
+    final searchQuery = ref.watch(searchQueryProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Shewit',
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 24),
-        ),
+        title: isSearchActive
+            ? TextField(
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Search products...',
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  ref.read(searchQueryProvider.notifier).state = value;
+                },
+              )
+            : Text(
+                'Shewit',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 24),
+              ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: Icon(isSearchActive ? Icons.close : Icons.search),
             onPressed: () {
-              // TODO: Phase 8 Search
+              final activeNotifier = ref.read(isSearchActiveProvider.notifier);
+              if (activeNotifier.state) {
+                // If closing search, clear the query
+                ref.read(searchQueryProvider.notifier).state = '';
+              }
+              activeNotifier.state = !activeNotifier.state;
             },
           ),
         ],

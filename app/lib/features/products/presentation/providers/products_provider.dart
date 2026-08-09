@@ -32,15 +32,34 @@ final categoriesProvider = FutureProvider<List<String>>((ref) async {
 // Holds the currently selected category filter ('All' by default)
 final selectedCategoryProvider = StateProvider<String>((ref) => 'All');
 
-// Filters products based on selected category
+// Holds the current search query
+final searchQueryProvider = StateProvider<String>((ref) => '');
+
+// Controls the visibility of the search bar in the UI
+final isSearchActiveProvider = StateProvider<bool>((ref) => false);
+
+// Filters products based on selected category AND search query
 final filteredProductsProvider = Provider<AsyncValue<List<Product>>>((ref) {
   final productsState = ref.watch(productsProvider);
   final selectedCategory = ref.watch(selectedCategoryProvider);
+  final searchQuery = ref.watch(searchQueryProvider).trim().toLowerCase();
 
   return productsState.whenData((products) {
-    if (selectedCategory == 'All') {
-      return products;
+    var filtered = products;
+    
+    // Apply category filter
+    if (selectedCategory != 'All') {
+      filtered = filtered.where((p) => p.category == selectedCategory).toList();
     }
-    return products.where((p) => p.category == selectedCategory).toList();
+    
+    // Apply search filter (searches title and description)
+    if (searchQuery.isNotEmpty) {
+      filtered = filtered.where((p) => 
+        p.title.toLowerCase().contains(searchQuery) ||
+        p.description.toLowerCase().contains(searchQuery)
+      ).toList();
+    }
+    
+    return filtered;
   });
 });
