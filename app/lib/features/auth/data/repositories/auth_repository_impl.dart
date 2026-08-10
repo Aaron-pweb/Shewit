@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../../../core/network/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
 import '../../../../core/error/app_exception.dart';
@@ -8,11 +8,11 @@ import '../../domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final DioClient _dioClient;
-  final FlutterSecureStorage _secureStorage;
+  final Box<String> _authBox;
   
   static const String _tokenKey = 'auth_token';
 
-  AuthRepositoryImpl(this._dioClient, this._secureStorage);
+  AuthRepositoryImpl(this._dioClient, this._authBox);
 
   @override
   Future<AuthSession> login(String username, String password) async {
@@ -25,11 +25,10 @@ class AuthRepositoryImpl implements AuthRepository {
         },
       );
       
-
       final token = response.data['token'] as String;
       
-      // Save token securely
-      await _secureStorage.write(key: _tokenKey, value: token);
+      // Save token safely using Hive instead of flutter_secure_storage (which hangs on Linux)
+      await _authBox.put(_tokenKey, token);
       
       return AuthSession(token: token);
     } on DioException catch (e) {
@@ -44,13 +43,13 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    await _secureStorage.delete(key: _tokenKey);
+    await _authBox.delete(_tokenKey);
   }
 
   @override
   Future<AuthSession?> checkSession() async {
     try {
-      final token = await _secureStorage.read(key: _tokenKey);
+      final token = _authBox.get(_tokenKey);
       if (token != null && token.isNotEmpty) {
         return AuthSession(token: token);
       }

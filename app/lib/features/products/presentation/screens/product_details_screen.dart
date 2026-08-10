@@ -237,21 +237,41 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
             ),
           ],
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-              const SizedBox(height: 16),
-              const Text('Failed to load product details.'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => ref.invalidate(productDetailsProvider(widget.productId)),
-                child: const Text('Retry'),
+        loading: () => Stack(
+          children: [
+            const Center(child: CircularProgressIndicator()),
+            SafeArea(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.primary),
+                onPressed: () => context.pop(),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+        error: (err, stack) => Stack(
+          children: [
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                  const SizedBox(height: 16),
+                  const Text('Failed to load product details.'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => ref.invalidate(productDetailsProvider(widget.productId)),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+            SafeArea(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.primary),
+                onPressed: () => context.pop(),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -5,8 +5,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
-import 'features/cart/domain/cart_item.dart';
-import 'features/products/data/models/product_model.dart';
+import 'features/auth/presentation/providers/auth_provider.dart';
+import 'features/cart/presentation/providers/cart_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,13 +14,16 @@ void main() async {
 
   // Initialize Hive
   await Hive.initFlutter();
-  Hive.registerAdapter(ProductAdapter());
-  Hive.registerAdapter(CartItemAdapter());
-  await Hive.openBox<CartItem>('cart_box');
+  final cartBox = await Hive.openBox<String>('shewit_cart');
+  final authBox = await Hive.openBox<String>('shewit_auth');
 
   runApp(
-    const ProviderScope(
-      child: ShewitApp(),
+    ProviderScope(
+      overrides: [
+        cartBoxProvider.overrideWithValue(cartBox),
+        authBoxProvider.overrideWithValue(authBox),
+      ],
+      child: const ShewitApp(),
     ),
   );
 }
@@ -36,7 +39,7 @@ class ShewitApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Shewit',
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      darkTheme: AppTheme.lightTheme,
       themeMode: themeMode,
       routerConfig: router,
       debugShowCheckedModeBanner: false,

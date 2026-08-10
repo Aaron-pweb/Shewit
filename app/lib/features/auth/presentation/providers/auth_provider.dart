@@ -2,16 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../../../core/network/dio_client.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 // Provide dependencies
 final dioClientProvider = Provider<DioClient>((ref) => DioClient());
-final secureStorageProvider = Provider<FlutterSecureStorage>((ref) => const FlutterSecureStorage());
+final authBoxProvider = Provider<Box<String>>((ref) => throw UnimplementedError());
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioClientProvider);
-  final storage = ref.watch(secureStorageProvider);
-  return AuthRepositoryImpl(dio, storage);
+  final authBox = ref.watch(authBoxProvider);
+  return AuthRepositoryImpl(dio, authBox);
 });
 
 // Auth State Provider
