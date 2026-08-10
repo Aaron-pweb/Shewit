@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/cart_item.dart';
 import '../providers/cart_provider.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -152,21 +153,7 @@ class CartScreen extends ConsumerWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Mock Checkout Flow
-                          ref.read(cartProvider.notifier).clearCart();
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Payment Successful'),
-                              content: const Text('Your order has been placed securely!'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
+                          context.push('/checkout');
                         },
                         child: const Text('Proceed to Checkout'),
                       ),
