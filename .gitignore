@@ -1,6 +1,13 @@
+#.gitignore
+
+.gradle/
+.kotlin/
+build/
+*.apk
+*.aab
+
 #/files
 
 Flutter E-Commerce Challenge — Design & Software Architecture Specification.md
 Stitch UI-UX Design Specification — Flutter E-Commerce App.md
 AGY Agent — Flutter E-Commerce Architecture & Implementation Planning.md
-
