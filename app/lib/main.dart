@@ -7,6 +7,7 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/cart/presentation/providers/cart_provider.dart';
+import 'features/profile/presentation/providers/wishlist_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,12 +17,16 @@ void main() async {
   await Hive.initFlutter();
   final cartBox = await Hive.openBox<String>('shewit_cart');
   final authBox = await Hive.openBox<String>('shewit_auth');
+  final wishlistBox = await Hive.openBox<String>('shewit_wishlist');
+  final settingsBox = await Hive.openBox<String>('shewit_settings');
 
   runApp(
     ProviderScope(
       overrides: [
         cartBoxProvider.overrideWithValue(cartBox),
         authBoxProvider.overrideWithValue(authBox),
+        wishlistBoxProvider.overrideWithValue(wishlistBox),
+        settingsBoxProvider.overrideWithValue(settingsBox),
       ],
       child: const ShewitApp(),
     ),
