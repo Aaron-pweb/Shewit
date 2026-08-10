@@ -47,4 +47,9 @@ class WishlistNotifier extends StateNotifier<List<Product>> {
     }
     _saveWishlist();
   }
+
+  void clearWishlist() {
+    state = [];
+    _saveWishlist();
+  }
 }

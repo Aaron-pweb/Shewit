@@ -15,7 +15,39 @@ class WishlistScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('My Wishlist'),
+        title: Text('My Wishlist ${wishlist.isNotEmpty ? '(${wishlist.length})' : ''}'),
+        actions: [
+          if (wishlist.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.delete_sweep_outlined),
+              tooltip: 'Clear Wishlist',
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Clear Wishlist'),
+                    content: const Text('Are you sure you want to remove all items from your wishlist?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          ref.read(wishlistProvider.notifier).clearWishlist();
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Wishlist cleared')),
+                          );
+                        },
+                        child: const Text('Clear', style: TextStyle(color: AppColors.error)),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
       ),
       body: wishlist.isEmpty
           ? Center(
