@@ -6,7 +6,7 @@ import '../../features/products/data/models/product_model.dart';
 import '../../core/theme/app_colors.dart';
 import 'app_shimmer.dart';
 import '../../features/cart/presentation/providers/cart_provider.dart';
-import '../../features/products/presentation/providers/favorites_provider.dart';
+import '../../features/profile/presentation/providers/wishlist_provider.dart';
 
 class ShewitProductCard extends ConsumerWidget {
   final Product product;
@@ -104,7 +104,7 @@ class ShewitProductCard extends ConsumerWidget {
                   Positioned(
                     top: 4,
                     right: 4,
-                    child: _FavoriteButton(productId: product.id),
+                    child: _FavoriteButton(product: product),
                   ),
                 ],
               ),
@@ -194,18 +194,25 @@ class _AddButton extends ConsumerWidget {
 }
 
 class _FavoriteButton extends ConsumerWidget {
-  final int productId;
-  const _FavoriteButton({required this.productId});
+  final Product product;
+  const _FavoriteButton({required this.product});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favorites = ref.watch(favoritesProvider);
-    final isFavorite = favorites.contains(productId);
+    ref.watch(wishlistProvider);
+    final isFavorite = ref.read(wishlistProvider.notifier).isFavorite(product.id);
 
     return IconButton(
       onPressed: () {
         HapticFeedback.selectionClick();
-        ref.read(favoritesProvider.notifier).toggle(productId);
+        ref.read(wishlistProvider.notifier).toggleFavorite(product);
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(isFavorite ? 'Removed from Wishlist' : 'Added to Wishlist'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       },
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,

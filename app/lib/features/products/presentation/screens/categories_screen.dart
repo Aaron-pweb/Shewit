@@ -38,9 +38,7 @@ class CategoriesScreen extends ConsumerWidget {
               final category = allCategories[index];
               return InkWell(
                 onTap: () {
-                  // Set the global category filter and jump to Home tab
-                  ref.read(selectedCategoryProvider.notifier).state = category;
-                  context.go('/home');
+                  context.push('/category/$category');
                 },
                 borderRadius: BorderRadius.circular(16),
                 child: Container(

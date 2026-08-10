@@ -369,7 +369,7 @@ class _HomeDrawer extends ConsumerWidget {
               icon: Icon(Icons.arrow_drop_down, color: Theme.of(context).colorScheme.onSurface),
               onChanged: (ThemeMode? mode) {
                 if (mode != null) {
-                  ref.read(themeModeProvider.notifier).state = mode;
+                  ref.read(themeModeProvider.notifier).setTheme(mode);
                 }
               },
               items: const [
@@ -382,7 +382,10 @@ class _HomeDrawer extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('Settings'),
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/settings');
+            },
           ),
           const Spacer(),
           ListTile(

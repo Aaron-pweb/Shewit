@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/products_provider.dart';
+import '../../../profile/presentation/providers/wishlist_provider.dart';
 import '../../../../features/cart/presentation/providers/cart_provider.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -46,13 +47,27 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     onPressed: () => context.pop(),
                   ),
                   actions: [
-                    IconButton(
-                      icon: Icon(Icons.favorite_border, color: Theme.of(context).colorScheme.primary),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Added to Wishlist')),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        ref.watch(wishlistProvider);
+                        final isFav = ref.read(wishlistProvider.notifier).isFavorite(product.id);
+                        return IconButton(
+                          icon: Icon(
+                            isFav ? Icons.favorite : Icons.favorite_border, 
+                            color: isFav ? AppColors.error : Theme.of(context).colorScheme.primary
+                          ),
+                          onPressed: () {
+                            ref.read(wishlistProvider.notifier).toggleFavorite(product);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(isFav ? 'Removed from Wishlist' : 'Added to Wishlist'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
                         );
-                      },
+                      }
                     ),
                   ],
                   flexibleSpace: FlexibleSpaceBar(
