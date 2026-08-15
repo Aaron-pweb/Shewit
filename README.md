@@ -30,15 +30,15 @@
 Shewit/
 ├── app/
 │   ├── lib/
-│   │   ├── core/           # App-wide configurations, network clients, routers, and themes
-│   │   ├── features/       # Feature modules (auth, cart, main, products, profile)
-│   │   ├── shared/         # Reusable widgets and UI components
-│   │   └── main.dart       # App entry point
-│   ├── assets/             # Images, icons, and static resources
-│   ├── android/            # Android platform configuration
-│   ├── ios/                # iOS platform configuration
-│   ├── web/                # Web support assets
-│   ├── windows/            # Windows platform configuration
-│   ├── macos/              # macOS platform configuration
-│   ├── linux/              # Linux platform configuration
-│   └── pubspec.yaml        # Project dependencies and assets setup
+│   │   ├── core/z
+│   │   ├── features/
+│   │   ├── shared/ 
+│   │   └── main.dart
+│   ├── assets/             
+│   ├── android/
+│   ├── ios/
+│   ├── web/
+│   ├── windows/
+│   ├── macos/
+│   ├── linux/               
+│   └── pubspec.yaml        
