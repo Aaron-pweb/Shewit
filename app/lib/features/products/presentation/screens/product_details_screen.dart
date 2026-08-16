@@ -80,6 +80,20 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               Color(0xFFB0B0B0),
                               BlendMode.multiply,
                             ),
+                            child: Hero(
+                              tag: 'product_image_${product.id}',
+                              child: CachedNetworkImage(
+                                imageUrl: product.image,
+                                fit: BoxFit.contain,
+                                placeholder: (context, url) => const AppShimmer(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Hero(
+                            tag: 'product_image_${product.id}',
                             child: CachedNetworkImage(
                               imageUrl: product.image,
                               fit: BoxFit.contain,
@@ -87,14 +101,6 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 width: double.infinity,
                                 height: double.infinity,
                               ),
-                            ),
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: product.image,
-                            fit: BoxFit.contain,
-                            placeholder: (context, url) => const AppShimmer(
-                              width: double.infinity,
-                              height: double.infinity,
                             ),
                           ),
                     ),
