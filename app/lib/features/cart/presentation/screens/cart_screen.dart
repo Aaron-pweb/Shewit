@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import '../../domain/cart_item.dart';
 import '../providers/cart_provider.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
 
 class CartScreen extends ConsumerWidget {
@@ -40,7 +39,7 @@ class CartScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.shopping_bag_outlined, size: 64, color: AppColors.borderSubtle),
+                  Icon(Icons.shopping_bag_outlined, size: 64, color: Theme.of(context).dividerColor),
                   const SizedBox(height: 16),
                   Text(
                     'Your cart is empty',
@@ -103,11 +102,11 @@ class CartScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border(
-                    top: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 1),
+                    top: BorderSide(color: Theme.of(context).dividerColor.withValues(alpha: 0.1), width: 1),
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       offset: const Offset(0, -4),
                       blurRadius: 16,
                     )
@@ -119,7 +118,7 @@ class CartScreen extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Subtotal', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
+                        Text('Subtotal', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7))),
                         Text('\$${subtotal.toStringAsFixed(2)}', style: Theme.of(context).textTheme.titleMedium),
                       ],
                     ),
@@ -127,7 +126,7 @@ class CartScreen extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Shipping', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
+                        Text('Shipping', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7))),
                         Text(
                           shipping == 0 ? 'Free' : '\$${shipping.toStringAsFixed(2)}', 
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -138,7 +137,7 @@ class CartScreen extends ConsumerWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(height: 1, color: Theme.of(context).dividerColor.withOpacity(0.1)),
+                      child: Divider(height: 1, color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -194,7 +193,7 @@ class _CartItemCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 24),
         decoration: BoxDecoration(
-          color: AppColors.error,
+          color: Theme.of(context).colorScheme.error,
           borderRadius: BorderRadius.circular(8),
         ),
         child: const Icon(Icons.delete, color: Colors.white),
@@ -204,7 +203,7 @@ class _CartItemCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1)),
+          border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +304,7 @@ class _ModifierButton extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1)),
+          border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Icon(icon, size: 16, color: Theme.of(context).colorScheme.onSurface),

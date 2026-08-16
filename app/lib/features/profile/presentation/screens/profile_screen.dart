@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/profile_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -31,11 +30,11 @@ class ProfileScreen extends ConsumerWidget {
                   children: [
                     CircleAvatar(
                       radius: 48,
-                      backgroundColor: AppColors.primary.withOpacity(0.1),
+                      backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                       child: Text(
                         user.name.firstname[0].toUpperCase() + user.name.lastname[0].toUpperCase(),
                         style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: AppColors.primary,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -48,7 +47,7 @@ class ProfileScreen extends ConsumerWidget {
                     Text(
                       '@${user.username}',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -61,7 +60,7 @@ class ProfileScreen extends ConsumerWidget {
                 title: 'Contact Information',
                 children: [
                   _ProfileTile(icon: Icons.email_outlined, title: 'Email', subtitle: user.email),
-                  const Divider(height: 1, color: AppColors.borderSubtle),
+                  Divider(height: 1, color: Theme.of(context).dividerColor),
                   _ProfileTile(icon: Icons.phone_outlined, title: 'Phone', subtitle: user.phone),
                 ],
               ),
@@ -85,14 +84,14 @@ class ProfileScreen extends ConsumerWidget {
                 title: 'Account',
                 children: [
                   const _ProfileTile(icon: Icons.shopping_bag_outlined, title: 'Order History', isAction: true),
-                  const Divider(height: 1, color: AppColors.borderSubtle),
+                  Divider(height: 1, color: Theme.of(context).dividerColor),
                   const _ProfileTile(icon: Icons.settings_outlined, title: 'Settings', isAction: true),
-                  const Divider(height: 1, color: AppColors.borderSubtle),
+                  Divider(height: 1, color: Theme.of(context).dividerColor),
                   ListTile(
-                    leading: const Icon(Icons.logout, color: AppColors.error),
+                    leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
                     title: Text(
                       'Log Out',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.error, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.bold),
                     ),
                     onTap: () {
                       ref.read(authProvider.notifier).logout();
@@ -125,16 +124,16 @@ class _ProfileSection extends StatelessWidget {
         Text(
           title,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: AppColors.textSecondary,
+            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.borderSubtle),
+            border: Border.all(color: Theme.of(context).dividerColor),
           ),
           child: Column(children: children),
         ),
@@ -159,10 +158,10 @@ class _ProfileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primary),
+      leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
       title: Text(title, style: Theme.of(context).textTheme.bodyLarge),
-      subtitle: subtitle != null ? Text(subtitle!, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)) : null,
-      trailing: isAction ? const Icon(Icons.chevron_right, color: AppColors.borderSubtle) : null,
+      subtitle: subtitle != null ? Text(subtitle!, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7))) : null,
+      trailing: isAction ? Icon(Icons.chevron_right, color: Theme.of(context).dividerColor) : null,
       onTap: isAction ? () {} : null,
     );
   }

@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../cart/presentation/providers/cart_provider.dart';
 
 class MainScreen extends ConsumerWidget {
@@ -24,9 +23,9 @@ class MainScreen extends ConsumerWidget {
           child: Container(
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
             decoration: BoxDecoration(
-              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor?.withOpacity(0.75),
+              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor?.withValues(alpha: 0.75),
               border: Border(
-                top: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 1),
+                top: BorderSide(color: Theme.of(context).dividerColor.withValues(alpha: 0.1), width: 1),
               ),
             ),
         child: SizedBox(
@@ -102,8 +101,8 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isActive 
-        ? (Theme.of(context).bottomNavigationBarTheme.selectedItemColor ?? AppColors.primary) 
-        : (Theme.of(context).bottomNavigationBarTheme.unselectedItemColor ?? AppColors.textSecondary);
+        ? (Theme.of(context).bottomNavigationBarTheme.selectedItemColor ?? Theme.of(context).colorScheme.primary) 
+        : (Theme.of(context).bottomNavigationBarTheme.unselectedItemColor ?? Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7));
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -127,8 +126,8 @@ class _NavItem extends StatelessWidget {
                     top: -4,
                     child: Container(
                       padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: AppColors.error,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.error,
                         shape: BoxShape.circle,
                       ),
                       constraints: const BoxConstraints(
@@ -137,8 +136,8 @@ class _NavItem extends StatelessWidget {
                       ),
                       child: Text(
                         badgeCount > 99 ? '99+' : badgeCount.toString(),
-                        style: const TextStyle(
-                          color: AppColors.textInverse,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onError,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           height: 1,

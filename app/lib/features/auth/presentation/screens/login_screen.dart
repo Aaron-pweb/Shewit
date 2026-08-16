@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/error/app_exception.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -49,8 +48,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           final message = error is AppException ? error.message : error.toString();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(message, style: const TextStyle(color: AppColors.textInverse)),
-              backgroundColor: AppColors.error,
+              content: Text(message, style: TextStyle(color: Theme.of(context).colorScheme.onError)),
+              backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );
         },
@@ -113,7 +112,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                       ),
                       onPressed: () {
                         setState(() {
@@ -143,12 +142,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: isLoading ? null : _login,
                     child: isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             height: 24,
                             width: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.textInverse),
+                              valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.onPrimary),
                             ),
                           )
                         : const Text('Log In'),
