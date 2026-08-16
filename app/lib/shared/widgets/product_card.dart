@@ -134,13 +134,7 @@ class ShewitProductCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      product.category.toUpperCase(),
-                      style: Theme.of(context).textTheme.labelSmall,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
+
                     Expanded(
                       child: Text(
                         product.title,
