@@ -20,9 +20,20 @@ class ShewitProductCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
+    return _ScaleOnPress(
       onTap: onTap,
-      child: Card(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
         clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,33 +54,39 @@ class ShewitProductCard extends ConsumerWidget {
                               Color(0xFFB0B0B0), // Dims the harsh white JPEG backgrounds
                               BlendMode.multiply,
                             ),
-                            child: CachedNetworkImage(
-                              imageUrl: product.image,
-                              fit: BoxFit.contain,
-                              memCacheWidth: 400,
-                              placeholder: (context, url) => const AppShimmer(
-                                width: double.infinity,
-                                height: double.infinity,
-                                borderRadius: 0,
+                              child: Hero(
+                                tag: 'product_image_${product.id}',
+                                child: CachedNetworkImage(
+                                  imageUrl: product.image,
+                                  fit: BoxFit.contain,
+                                  memCacheWidth: 400,
+                                  placeholder: (context, url) => const AppShimmer(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    borderRadius: 0,
+                                  ),
+                                  errorWidget: (context, url, error) => const Center(
+                                    child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
+                                  ),
+                                ),
                               ),
-                              errorWidget: (context, url, error) => const Center(
-                                child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
+                            )
+                          : Hero(
+                              tag: 'product_image_${product.id}',
+                              child: CachedNetworkImage(
+                                imageUrl: product.image,
+                                fit: BoxFit.contain,
+                                memCacheWidth: 400,
+                                placeholder: (context, url) => const AppShimmer(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  borderRadius: 0,
+                                ),
+                                errorWidget: (context, url, error) => const Center(
+                                  child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
+                                ),
                               ),
                             ),
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: product.image,
-                            fit: BoxFit.contain,
-                            memCacheWidth: 400,
-                            placeholder: (context, url) => const AppShimmer(
-                              width: double.infinity,
-                              height: double.infinity,
-                              borderRadius: 0,
-                            ),
-                            errorWidget: (context, url, error) => const Center(
-                              child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
-                            ),
-                          ),
                     ),
                   ),
                   // Rating Badge
@@ -222,6 +239,68 @@ class _FavoriteButton extends ConsumerWidget {
       splashRadius: 20,
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+    );
+  }
+}
+
+class _ScaleOnPress extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const _ScaleOnPress({required this.child, required this.onTap});
+
+  @override
+  State<_ScaleOnPress> createState() => _ScaleOnPressState();
+}
+
+class _ScaleOnPressState extends State<_ScaleOnPress> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    _controller.reverse();
+    widget.onTap();
+  }
+
+  void _onTapCancel() {
+    _controller.reverse();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) => Transform.scale(
+          scale: _scaleAnimation.value,
+          child: widget.child,
+        ),
+      ),
     );
   }
 }

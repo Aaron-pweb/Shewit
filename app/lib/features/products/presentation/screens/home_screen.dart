@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,45 +21,8 @@ class HomeScreen extends ConsumerWidget {
     final searchQuery = ref.watch(searchQueryProvider);
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       drawer: const _HomeDrawer(),
-      appBar: AppBar(
-        title: isSearchActive
-            ? TextField(
-                autofocus: true,
-                style: const TextStyle(color: AppColors.textPrimary),
-                cursorColor: AppColors.primary,
-                decoration: const InputDecoration(
-                  hintText: 'Search products...',
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.borderSubtle),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-                  ),
-                  contentPadding: EdgeInsets.only(bottom: 8),
-                ),
-                onChanged: (value) {
-                  ref.read(searchQueryProvider.notifier).state = value;
-                },
-              )
-            : Text(
-                'Shewit',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 24),
-              ),
-        actions: [
-          IconButton(
-            icon: Icon(isSearchActive ? Icons.close : Icons.search),
-            onPressed: () {
-              final activeNotifier = ref.read(isSearchActiveProvider.notifier);
-              if (activeNotifier.state) {
-                // If closing search, clear the query
-                ref.read(searchQueryProvider.notifier).state = '';
-              }
-              activeNotifier.state = !activeNotifier.state;
-            },
-          ),
-        ],
-      ),
       body: RefreshIndicator(
         color: AppColors.primary,
         onRefresh: () async {
@@ -72,6 +36,52 @@ class HomeScreen extends ConsumerWidget {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(), // Ensures pull-to-refresh works even if not full
           slivers: [
+            SliverAppBar(
+              floating: true,
+              pinned: true,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.75),
+              flexibleSpace: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
+                  child: Container(color: Colors.transparent),
+                ),
+              ),
+              title: isSearchActive
+                  ? TextField(
+                      autofocus: true,
+                      style: const TextStyle(color: AppColors.textPrimary),
+                      cursorColor: AppColors.primary,
+                      decoration: const InputDecoration(
+                        hintText: 'Search products...',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.borderSubtle),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+                        ),
+                        contentPadding: EdgeInsets.only(bottom: 8),
+                      ),
+                      onChanged: (value) {
+                        ref.read(searchQueryProvider.notifier).state = value;
+                      },
+                    )
+                  : Text(
+                      'Shewit',
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 24),
+                    ),
+              actions: [
+                IconButton(
+                  icon: Icon(isSearchActive ? Icons.close : Icons.search),
+                  onPressed: () {
+                    final activeNotifier = ref.read(isSearchActiveProvider.notifier);
+                    if (activeNotifier.state) {
+                      ref.read(searchQueryProvider.notifier).state = '';
+                    }
+                    activeNotifier.state = !activeNotifier.state;
+                  },
+                ),
+              ],
+            ),
             // Categories Header
             SliverToBoxAdapter(
               child: Padding(

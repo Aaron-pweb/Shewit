@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,15 +16,19 @@ class MainScreen extends ConsumerWidget {
     final selectedIndex = _calculateSelectedIndex(context);
 
     return Scaffold(
+      extendBody: true,
       body: child,
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-        decoration: BoxDecoration(
-          color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-          border: Border(
-            top: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 1),
-          ),
-        ),
+      bottomNavigationBar: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
+          child: Container(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            decoration: BoxDecoration(
+              color: Theme.of(context).bottomNavigationBarTheme.backgroundColor?.withOpacity(0.75),
+              border: Border(
+                top: BorderSide(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 1),
+              ),
+            ),
         child: SizedBox(
           height: 64,
           child: Row(
@@ -62,8 +67,10 @@ class MainScreen extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).matchedLocation;
