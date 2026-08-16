@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../providers/products_provider.dart';
 import '../../../../shared/widgets/product_card.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
@@ -24,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
       extendBodyBehindAppBar: true,
       drawer: const _HomeDrawer(),
       body: RefreshIndicator(
-        color: AppColors.primary,
+        color: Theme.of(context).colorScheme.primary,
         onRefresh: () async {
           ref.invalidate(productsProvider);
           ref.invalidate(categoriesProvider);
@@ -39,7 +38,7 @@ class HomeScreen extends ConsumerWidget {
             SliverAppBar(
               floating: true,
               pinned: true,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.75),
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.75),
               flexibleSpace: ClipRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
@@ -49,17 +48,17 @@ class HomeScreen extends ConsumerWidget {
               title: isSearchActive
                   ? TextField(
                       autofocus: true,
-                      style: const TextStyle(color: AppColors.textPrimary),
-                      cursorColor: AppColors.primary,
-                      decoration: const InputDecoration(
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                      cursorColor: Theme.of(context).colorScheme.primary,
+                      decoration: InputDecoration(
                         hintText: 'Search products...',
                         border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.borderSubtle),
+                          borderSide: BorderSide(color: Theme.of(context).dividerColor),
                         ),
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+                          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5),
                         ),
-                        contentPadding: EdgeInsets.only(bottom: 8),
+                        contentPadding: const EdgeInsets.only(bottom: 8),
                       ),
                       onChanged: (value) {
                         ref.read(searchQueryProvider.notifier).state = value;
@@ -89,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
                 child: categoriesAsync.when(
                   data: (categories) => _CategoryList(categories: ['All', ...categories]),
                   loading: () => const _CategoryListSkeleton(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
               ),
             ),
@@ -119,7 +118,7 @@ class HomeScreen extends ConsumerWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                             scrollDirection: Axis.horizontal,
                             itemCount: topFeatured.length,
-                            separatorBuilder: (_, __) => const SizedBox(width: 16),
+                            separatorBuilder: (_, _) => const SizedBox(width: 16),
                             itemBuilder: (context, index) {
                               final product = topFeatured[index];
                               return SizedBox(
@@ -136,7 +135,7 @@ class HomeScreen extends ConsumerWidget {
                     );
                   },
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
               ),
 
@@ -159,14 +158,14 @@ class HomeScreen extends ConsumerWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.search_off_outlined, size: 64, color: AppColors.borderSubtle),
+                            Icon(Icons.search_off_outlined, size: 64, color: Theme.of(context).dividerColor),
                             const SizedBox(height: 16),
                             Text(
                               searchQuery.isNotEmpty 
                                   ? "We couldn't find anything for '$searchQuery'"
                                   : "No products found.",
                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: AppColors.textSecondary,
+                                color: Theme.of(context).textTheme.bodyMedium?.color,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -217,7 +216,7 @@ class HomeScreen extends ConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+                        Icon(Icons.error_outline, color: Theme.of(context).colorScheme.error, size: 48),
                         const SizedBox(height: 16),
                         Text('Failed to load products.', style: Theme.of(context).textTheme.bodyLarge),
                         const SizedBox(height: 16),
@@ -257,7 +256,7 @@ class _CategoryList extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final cat = categories[index];
           final isSelected = cat == selected;
@@ -265,12 +264,12 @@ class _CategoryList extends ConsumerWidget {
             label: Text(
               cat.toUpperCase(),
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: isSelected ? AppColors.textInverse : AppColors.textPrimary,
+                    color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface,
                   ),
             ),
-            backgroundColor: isSelected ? AppColors.textPrimary : Colors.transparent,
+            backgroundColor: isSelected ? Theme.of(context).colorScheme.onSurface : Colors.transparent,
             side: BorderSide(
-              color: isSelected ? AppColors.textPrimary : AppColors.borderSubtle,
+              color: isSelected ? Theme.of(context).colorScheme.onSurface : Theme.of(context).dividerColor,
             ),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)), // Pill shaped
             onPressed: () {
@@ -294,8 +293,8 @@ class _CategoryListSkeleton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
         itemCount: 4,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (_, __) => const AppShimmer(width: 100, height: 40, borderRadius: 100),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (_, _) => const AppShimmer(width: 100, height: 40, borderRadius: 100),
       ),
     );
   }
@@ -311,8 +310,8 @@ class _HomeDrawer extends ConsumerWidget {
       child: Column(
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
             ),
             child: SizedBox(
               width: double.infinity,
@@ -323,7 +322,7 @@ class _HomeDrawer extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.person, size: 48, color: Colors.white),
@@ -399,8 +398,8 @@ class _HomeDrawer extends ConsumerWidget {
           ),
           const Spacer(),
           ListTile(
-            leading: const Icon(Icons.logout, color: AppColors.error),
-            title: const Text('Log Out', style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold)),
+            leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
+            title: Text('Log Out', style: TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.bold)),
             onTap: () {
               Navigator.pop(context);
               ref.read(authProvider.notifier).logout();

@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../../data/repositories/user_repository_impl.dart';
 import '../../data/models/user_model.dart';
-import '../../../../core/network/dio_client.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {

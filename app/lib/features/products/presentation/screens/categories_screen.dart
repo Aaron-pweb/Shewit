@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/products_provider.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
 
 class CategoriesScreen extends ConsumerWidget {
@@ -43,12 +42,12 @@ class CategoriesScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.borderSubtle),
+                    border: Border.all(color: Theme.of(context).dividerColor),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.02),
+                        color: Colors.black.withValues(alpha: 0.02),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       )
@@ -57,7 +56,7 @@ class CategoriesScreen extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _getCategoryIcon(category),
+                      _getCategoryIcon(category, context),
                       const SizedBox(height: 16),
                       Text(
                         category.toUpperCase(),
@@ -90,7 +89,7 @@ class CategoriesScreen extends ConsumerWidget {
     );
   }
 
-  Widget _getCategoryIcon(String category) {
+  Widget _getCategoryIcon(String category, BuildContext context) {
     IconData iconData;
     switch (category.toLowerCase()) {
       case 'electronics':
@@ -114,10 +113,10 @@ class CategoriesScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.05),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
         shape: BoxShape.circle,
       ),
-      child: Icon(iconData, size: 32, color: AppColors.primary),
+      child: Icon(iconData, size: 32, color: Theme.of(context).colorScheme.primary),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/theme_provider.dart';
-import '../../../../core/theme/app_colors.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -21,7 +20,7 @@ class SettingsScreen extends ConsumerWidget {
             child: Text(
               'Appearance',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: AppColors.primary,
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -52,7 +51,7 @@ class SettingsScreen extends ConsumerWidget {
             child: Text(
               'Notifications',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: AppColors.primary,
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -62,7 +61,7 @@ class SettingsScreen extends ConsumerWidget {
             title: const Text('Push Notifications'),
             subtitle: const Text('Receive alerts for sales and updates'),
             value: true,
-            activeColor: AppColors.primary,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
             onChanged: (val) {
               // Mock implementation
               ScaffoldMessenger.of(context).clearSnackBars();
@@ -76,7 +75,7 @@ class SettingsScreen extends ConsumerWidget {
             title: const Text('Email Newsletter'),
             subtitle: const Text('Get our weekly product highlights'),
             value: false,
-            activeColor: AppColors.primary,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
             onChanged: (val) {
               // Mock implementation
               ScaffoldMessenger.of(context).clearSnackBars();
@@ -91,7 +90,7 @@ class SettingsScreen extends ConsumerWidget {
             child: Text(
               'About',
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: AppColors.primary,
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),

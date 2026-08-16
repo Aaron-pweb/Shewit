@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/products/data/models/product_model.dart';
-import '../../core/theme/app_colors.dart';
 import 'app_shimmer.dart';
 import '../../features/cart/presentation/providers/cart_provider.dart';
 import '../../features/profile/presentation/providers/wishlist_provider.dart';
@@ -28,7 +27,7 @@ class ShewitProductCard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -65,8 +64,8 @@ class ShewitProductCard extends ConsumerWidget {
                                     height: double.infinity,
                                     borderRadius: 0,
                                   ),
-                                  errorWidget: (context, url, error) => const Center(
-                                    child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
+                                  errorWidget: (context, url, error) => Center(
+                                    child: Icon(Icons.broken_image_outlined, color: Theme.of(context).dividerColor, size: 48),
                                   ),
                                 ),
                               ),
@@ -82,8 +81,8 @@ class ShewitProductCard extends ConsumerWidget {
                                   height: double.infinity,
                                   borderRadius: 0,
                                 ),
-                                errorWidget: (context, url, error) => const Center(
-                                  child: Icon(Icons.broken_image_outlined, color: AppColors.borderSubtle, size: 48),
+                                errorWidget: (context, url, error) => Center(
+                                  child: Icon(Icons.broken_image_outlined, color: Theme.of(context).dividerColor, size: 48),
                                 ),
                               ),
                             ),
@@ -96,21 +95,21 @@ class ShewitProductCard extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.surface.withOpacity(0.9),
+                        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppColors.borderSubtle),
+                        border: Border.all(color: Theme.of(context).dividerColor),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.star, color: AppColors.secondary, size: 12),
+                          Icon(Icons.star, color: Theme.of(context).colorScheme.secondary, size: 12),
                           const SizedBox(width: 4),
                           Text(
                             product.rating.rate.toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ],
@@ -191,12 +190,12 @@ class _AddButton extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(4),
         ),
-        child: const Icon(
+        child: Icon(
           Icons.add,
-          color: AppColors.primary,
+          color: Theme.of(context).colorScheme.primary,
           size: 20,
         ),
       ),
@@ -227,7 +226,7 @@ class _FavoriteButton extends ConsumerWidget {
       },
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
-        color: isFavorite ? AppColors.error : AppColors.textSecondary.withOpacity(0.5),
+        color: isFavorite ? Theme.of(context).colorScheme.error : Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
         size: 20,
       ),
       splashRadius: 20,

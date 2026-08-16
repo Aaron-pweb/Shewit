@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/product_model.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../../data/repositories/product_repository_impl.dart';
-import '../../../../core/network/dio_client.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
 // Provides the repository

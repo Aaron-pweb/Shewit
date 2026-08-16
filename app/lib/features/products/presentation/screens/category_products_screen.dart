@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../providers/products_provider.dart';
 import '../../../../shared/widgets/product_card.dart';
 import '../../../../shared/widgets/app_shimmer.dart';
-import '../../../../core/theme/app_colors.dart';
 
 class CategoryProductsScreen extends ConsumerWidget {
   final String categoryName;
@@ -31,7 +30,7 @@ class CategoryProductsScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.category_outlined, size: 64, color: AppColors.borderSubtle),
+                  Icon(Icons.category_outlined, size: 64, color: Theme.of(context).dividerColor),
                   const SizedBox(height: 16),
                   Text('No products found in this category.', style: Theme.of(context).textTheme.bodyLarge),
                 ],
@@ -47,7 +46,7 @@ class CategoryProductsScreen extends ConsumerWidget {
                 child: Text(
                   '${categoryProducts.length} items',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                       ),
                 ),
               ),

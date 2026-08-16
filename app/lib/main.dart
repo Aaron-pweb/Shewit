@@ -44,7 +44,7 @@ class ShewitApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Shewit',
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       routerConfig: router,
       debugShowCheckedModeBanner: false,

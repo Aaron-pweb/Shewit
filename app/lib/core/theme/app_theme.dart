@@ -19,6 +19,7 @@ class AppTheme {
         onError: AppColors.textInverse,
       ),
       scaffoldBackgroundColor: AppColors.background,
+      dividerColor: AppColors.borderSubtle,
       
       // Typography tailored exactly to Shewit Design Spec
       textTheme: GoogleFonts.interTextTheme().copyWith(
@@ -160,6 +161,7 @@ class AppTheme {
         onError: AppColors.textInverse,
       ),
       scaffoldBackgroundColor: AppColors.surfaceDark,
+      dividerColor: const Color(0xFF333333),
       
       textTheme: GoogleFonts.interTextTheme().copyWith(
         headlineLarge: GoogleFonts.inter(
