@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/wishlist_provider.dart';
 import '../../../../shared/widgets/product_card.dart';
-import '../../../../core/theme/app_colors.dart';
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({super.key});
@@ -40,7 +39,7 @@ class WishlistScreen extends ConsumerWidget {
                             const SnackBar(content: Text('Wishlist cleared')),
                           );
                         },
-                        child: const Text('Clear', style: TextStyle(color: AppColors.error)),
+                        child: Text('Clear', style: TextStyle(color: Theme.of(context).colorScheme.error)),
                       ),
                     ],
                   ),
@@ -54,7 +53,7 @@ class WishlistScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.favorite_border, size: 64, color: AppColors.borderSubtle),
+                  Icon(Icons.favorite_border, size: 64, color: Theme.of(context).dividerColor),
                   const SizedBox(height: 16),
                   Text(
                     'Your wishlist is empty',
@@ -63,7 +62,7 @@ class WishlistScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Save items you love here',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7)),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(

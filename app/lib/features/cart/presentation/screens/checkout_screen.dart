@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/cart_provider.dart';
-import '../../../../core/theme/app_colors.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
@@ -32,11 +31,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Column(
+        title: Column(
           children: [
-            Icon(Icons.check_circle, color: AppColors.success, size: 64),
-            SizedBox(height: 16),
-            Text('Order Confirmed!', textAlign: TextAlign.center),
+            Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary, size: 64),
+            const SizedBox(height: 16),
+            const Text('Order Confirmed!', textAlign: TextAlign.center),
           ],
         ),
         content: const Text(
@@ -124,7 +123,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 Text('Total', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
                 Text(
                   '\$${cartTotal.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
                 ),
               ],
             ),
@@ -171,16 +170,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          border: Border.all(color: isSelected ? AppColors.primary : AppColors.borderSubtle, width: isSelected ? 2 : 1),
+          border: Border.all(color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor, width: isSelected ? 2 : 1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected ? AppColors.primary : AppColors.textSecondary),
+            Icon(icon, color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5)),
             const SizedBox(width: 16),
             Text(title, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
             const Spacer(),
-            if (isSelected) const Icon(Icons.check_circle, color: AppColors.primary),
+            if (isSelected) Icon(Icons.check_circle, color: Theme.of(context).colorScheme.primary),
           ],
         ),
       ),
